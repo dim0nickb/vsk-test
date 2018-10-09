@@ -11,7 +11,7 @@ export class CommonService {
     }
 
     getData(): Observable<any> {
-        return this.http.get('http://jsonplaceholder.typicode.com/posts?userId=1')
+        return this.http.get('https://jsonplaceholder.typicode.com/posts?userId=1')
         .pipe(
             map((data: any) => {
                 return data;
