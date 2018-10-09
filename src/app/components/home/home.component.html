@@ -1,13 +1,26 @@
-<mat-form-field class="big-input" [floatLabel]="options.value.floatLabel">
-    <mat-label>Номер договора</mat-label>
-    <input
-        matInput
-        placeholder="AAA-123456789FF"
-        app-contract-number
-        [(ngModel)]="contractNumber"
-        pattern="[A-Z]{3}-[0-9]{9}[A-Z]{2}"
-    >
-</mat-form-field>
-<div>
-    <button class="big-button" mat-raised-button>Отправить</button>
+<div class="home-container">
+    <mat-form-field class="big-input" [floatLabel]="options.value.floatLabel">
+        <mat-label>Номер договора</mat-label>
+        <input
+            id="contractNumberControl"
+            name="contractNumberControl"
+            required
+            matInput
+            placeholder="AAA-123456789FF"
+            app-contract-number
+            [(ngModel)]="contractNumber"
+            pattern="[A-Z]{3}-[0-9]{9}[A-Z]{2}"
+            #contractNumberControl="ngModel"
+        >
+    </mat-form-field>
+    <div>
+        <button
+            class="big-button"
+            mat-raised-button
+            (click)="process()"
+            [disabled]="contractNumberControl.invalid"
+        >
+            Отправить
+        </button>
+    </div>
 </div>

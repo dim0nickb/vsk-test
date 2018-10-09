@@ -45,6 +45,9 @@ import {
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { ContractNumberDirective } from './components/home/contract-number.directive';
+import { RouterModule, Routes } from '@angular/router';
+import { ResultsComponent } from './components/results/results.component';
+import { CommonService } from './services/common.service';
 
 @NgModule({
   exports: [
@@ -89,10 +92,21 @@ import { ContractNumberDirective } from './components/home/contract-number.direc
 })
 
 export class VSKTestModule { }
+
+const appRoutes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'results', component: ResultsComponent },
+  { path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  }
+];
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    ResultsComponent,
     ContractNumberDirective
   ],
   imports: [
@@ -102,9 +116,13 @@ export class VSKTestModule { }
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    VSKTestModule
+    VSKTestModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: false }
+    )
   ],
-  providers: [],
+  providers: [CommonService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

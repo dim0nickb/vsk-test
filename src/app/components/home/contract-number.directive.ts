@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Output, Renderer } from '@angular/core';
 import { NgModel } from '@angular/forms';
 
 @Directive({
@@ -19,7 +19,8 @@ export class ContractNumberDirective {
     map_eng = `QWERTYUIOP[]ASDFGHJKL;'ZXCVBNM,.`;
 
     constructor(public model: NgModel,
-        public el: ElementRef) {
+        public el: ElementRef,
+        public renderer: Renderer) {
     }
 
     /**Изменение ввода*/
@@ -27,15 +28,6 @@ export class ContractNumberDirective {
 
 
         if (event && event.target) {
-            // Текущая позиция курсора
-            let start = this.el.nativeElement.selectionStart;
-            let end = this.el.nativeElement.selectionEnd;
-
-            // Количество символов до курсора
-            let quDigitBefore = 0;
-            if (event.target.value.substring(0, start)) {
-                quDigitBefore = event.target.value.substring(0, start).length;
-            }
 
             // Привести всё к верхнему регистру
             let newVal = event.target.value.toUpperCase();
@@ -48,48 +40,27 @@ export class ContractNumberDirective {
 
             // Оставить только буквы и цифры
             newVal = newVal.replace(new RegExp('[^a-zA-Z0-9 ]', 'g'), '');
-
             /**Ограничение на длину номера*/
-            if (newVal.length > 15) {
-                newVal = newVal.substring(0, 15);
+            if (newVal.length > 14) {
+                newVal = newVal.substring(0, 14);
             }
 
             // Добавляем разделители
             if (newVal.length === 0) {
                 newVal = '';
             } else if (newVal.length <= 3) {
-                newVal = newVal.replace(/^\d/, '');
+                newVal = newVal.replace(new RegExp('[^A-Z ]', 'g'), '');
             } else if (newVal.length <= 12) {
-                console.log(newVal);
-                newVal = newVal.substring(0, 3) + '-' + newVal.substring(4, newVal.length - 4).replace(/^\D/, '');
-            } else if (newVal.length <= 15) {
-                newVal = newVal.replace(/^([A-Z]{3})([0-9]{9})([A-Z]{2})/, '$1-$2$3');
-            }
-/*
-            let newPos = 0;
-            // Находим позицию в поформатированной строке
-            for (let char of newVal.split('')) {
-                // Если цифра то минисуем
-                if (!isNaN(parseInt(char, 10))) {
-                    // Is a number
-                    quDigitBefore--;
-                }
-                if (quDigitBefore < 0) {
-                    break;
-                }
-                newPos++;
+                newVal = newVal.substring(0, 3) + '-' + newVal.substring(3, newVal.length).replace(new RegExp('[^0-9 ]', 'g'), '');
+            } else if (newVal.length <= 13) {
+                newVal = newVal.substring(0, 3) + '-' + newVal.substring(3, newVal.length-1).replace(new RegExp('[^0-9 ]', 'g'), '') + newVal.substring(12, newVal.length).replace(new RegExp('[^A-Z ]', 'g'), '');
+            } else if (newVal.length <= 14) {
+                newVal = newVal.substring(0, 3) + '-' + newVal.substring(3, newVal.length-2).replace(new RegExp('[^0-9 ]', 'g'), '') + newVal.substring(12, newVal.length).replace(new RegExp('[^A-Z ]', 'g'), '');
+                this.renderer.invokeElementMethod(this.el.nativeElement, 'blur', []);
             }
 
-            // Сдвинуть курсор на добавленные/удаленные разделители
-            start = newPos;
-            end = newPos;
-            }
-/**/
             this.model.valueAccessor.writeValue(newVal);
             this.ngModelChange.emit(newVal);
-
-            // Установить позицию курсора
-            // this.el.nativeElement.setSelectionRange(start, end);
         }
     }
 }
