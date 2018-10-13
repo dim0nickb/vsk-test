@@ -1,27 +1,22 @@
-# VskTest
+Создать одностраничное приложение.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.3.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Route /home/ должен отображать следующие компоненты
+•	Input с placeholder “AAA-123456789FF”
+•	label «Номер договора»
+•	button «Отправить»
+Для обработки инпута требуется разработать директиву ввода номера договора. 
+В input при вводе с клавиатуры или вставке сохраненного значения из буфера(ctrl+v): 
+•	не позволять вводить недопустимые символы, 
+•	буквы из нижнего регистра переводить в верхний,
+•	заполнять input в соответствии с шаблоном, 
+•	русские буквы автоматически заменять на английские по QUERTY раскладке.
+Шаблон:
+[Char][Char][Char]-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][Char][Char]
+Пример: 
+Ввели ФФФ-123456789АА на выход получили AAA-123456789FF
+Допустимые символы:
+ [a-z0-9]
+Кнопка должна быть не активна пока input не заполнен.
+После активации и нажатия на кнопку необходимо совершить GET запрос по адресу: http://jsonplaceholder.typicode.com/posts?userId=1
+Сменить роут приложения на /result/ и отобразить полученные данные в виде таблицы. 
+Проект необходимо разместить на github.
